@@ -1,0 +1,17 @@
+{
+  "name": "Portfolio Workshop",
+  "image": "mcr.microsoft.com/devcontainers/python:3",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "Your portfolio preview",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "postAttachCommand": "python3 -m http.server 8000",
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["content.js"]
+    }
+  }
+}

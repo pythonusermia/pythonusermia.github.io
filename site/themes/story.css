@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap");
+
+/* Story: friendly, timeline-driven theme with light + dark mode. Change --accent to recolor. */
+:root {
+  color-scheme: light;
+  --bg: #F2F5F1;
+  --surface: #FFFFFF;
+  --ink: #1C2421;
+  --muted: #56625D;
+  --line: #DCE3DE;
+  --accent: #C94A26;
+  --accent-2: #1E6B73;
+  --tint-1: #FBE4DA;
+  --tint-2: #D9ECEA;
+  --tint-3: #ECE8F6;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #151A18; --surface: #1D2421; --ink: #ECF1EE; --muted: #A3AFAA; --line: #2E3834;
+    --accent: #F07A55; --accent-2: #5FB5BD; --tint-1: #3A2620; --tint-2: #1F3436; --tint-3: #2A2736;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #151A18; --surface: #1D2421; --ink: #ECF1EE; --muted: #A3AFAA; --line: #2E3834;
+  --accent: #F07A55; --accent-2: #5FB5BD; --tint-1: #3A2620; --tint-2: #1F3436; --tint-3: #2A2736;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.65 var(--sans); padding-inline: 20px; }
+a { color: var(--accent-2); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 64px 96px; display: flex; flex-direction: column; gap: 72px; }
+
+h2 { font: 400 40px/1.1 var(--serif); margin: 0 0 22px; letter-spacing: -0.3px; }
+h2 em, .intro h1 em { color: var(--accent); }
+
+.intro { display: flex; flex-direction: column; gap: 22px; }
+.avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; background: var(--tint-1); color: var(--accent); display: grid; place-items: center; font: 400 38px var(--serif); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--line); }
+.intro h1 { font: 400 clamp(42px, 8vw, 68px)/1.04 var(--serif); letter-spacing: -1px; margin: 0; text-wrap: balance; }
+.intro p { margin: 0; font-size: 19px; color: var(--muted); max-width: 58ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 14px; font-weight: 500; padding: 6px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+.chip.now { background: var(--tint-2); border-color: transparent; color: var(--accent-2); }
+
+.timeline { list-style: none; margin: 0; padding: 0; position: relative; display: flex; flex-direction: column; gap: 28px; }
+.timeline::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: var(--line); }
+.timeline li { position: relative; padding-left: 36px; }
+.timeline li::before { content: ""; position: absolute; left: 0; top: 7px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 3px solid var(--accent); }
+.yr { font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+.timeline h3 { font: 600 19px/1.3 var(--sans); margin: 2px 0 4px; }
+.timeline p { margin: 0; color: var(--muted); }
+
+.bento { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.card { border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 10px; }
+.card.wide { grid-column: span 2; }
+.c1 { background: var(--tint-1); } .c2 { background: var(--tint-2); } .c3 { background: var(--tint-3); }
+.card .kind { font-size: 13px; font-weight: 600; color: var(--muted); }
+.card h3 { font: 400 32px/1.05 var(--serif); margin: 0; }
+.card h3 a { color: inherit; }
+.card p { margin: 0; }
+.card .result { font-weight: 600; font-size: 15px; color: var(--accent-2); margin-top: auto; }
+
+.toolbox { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.toolbox h3 { font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.toolbox p { margin: 0; }
+
+.contact { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 36px; }
+.contact .row { display: flex; flex-wrap: wrap; gap: 10px 24px; font-weight: 600; overflow-wrap: anywhere; }
+footer { text-align: center; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .bento, .toolbox { grid-template-columns: 1fr; }
+  .card.wide { grid-column: auto; }
+  .contact { padding: 26px; }
+}
