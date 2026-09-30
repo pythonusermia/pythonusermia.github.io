@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- The active theme's stylesheet gets swapped in here -->
+  <!-- Vision Pro startup: hide the page until the boot animation is ready (extras.js removes this) -->
+  <script>document.documentElement.classList.add("px-booting")</script>
+  <style>html.px-booting body>*:not(#px-boot){opacity:0;animation:px-unhide 0s 6s forwards}@keyframes px-unhide{to{opacity:1}}</style>
   <link id="theme-css" rel="stylesheet" href="site/themes/clean.css">
 </head>
 <body>
@@ -21,5 +24,7 @@
   <script src="site/themes/story.js"></script>
   <!-- 3. The engine that puts them together -->
   <script src="site/app.js"></script>
+  <!-- 4. Fun extras (pixel cat, mini terminal) -->
+  <script src="site/extras.js"></script>
 </body>
 </html>

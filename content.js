@@ -11,27 +11,50 @@ window.PORTFOLIO = {
      Pick your look: "terminal", "clean", or "story".
      showThemePicker: true shows the style switcher in the corner.
      Set it to false once you've picked your favorite.            */
-  theme: "clean",
+  theme: "terminal",
   showThemePicker: true,
 
+  /* ---------- FUN EXTRAS (Terminal style only) ----------
+     Set any of these to false to turn it off.                     */
+  extras: {
+    words: ["Software Engineer", "CS Student", "Apple Intern"],   // flashed in place of your name during the typing intro
+    boot: true,       // Vision Pro startup animation on every page load (any click or key skips it)
+    typing: true,     // the prompt, your name (typed, deleted, retyped) and school line type out on load
+    cat: true,        // a pixel cat wandering along the bottom of the page
+    terminal: true,   // click ">_ terminal" or press ` for a mini command line
+    spirals: true,    // pixel spiral flourish in the left margin (wide screens only)
+    pixels: true,     // pixel favicon and footer heart
+    avatar: true,     // pixel Vision Pro profile picture (only if you haven't set a photo)
+    logos: true,      // company logo next to matching experience entries (Apple)
+  },
+
   /* ---------- ABOUT YOU ---------- */
-  name: "Anthony Cardozo",
-  initials: "AC",                       // shown if you don't add a photo
+  name: "Mia Yonker",
+  initials: "MY",                       // shown if you don't add a photo
   photo: "",                            // optional: "images/headshot.jpg"
-  headline: "Software engineer building cloud systems and developer tools.",
-  tagline: "I like building things people actually use.",   // used by the Story style
+  headline: "Computer science student building apps for iOS, visionOS, and the web.",
+  tagline: "I like turning emerging tech into things people can actually use.",   // used by the Story style
   school: "CS at UT Austin, class of 2029",
   location: "Austin, TX",
-  status: "Looking for Summer 2027 internships",             // leave "" to hide
+  status: "",                           // leave "" to hide
 
-  about: "I've worked on AI evaluation at AWS, a browser-based compiler at a startup, and the platform my SHPE chapter runs on. Before all that, I built an online store for my family's candy business.",
+  about: "I'm a Computer Science major at UT Austin with a minor in Statistics and Data Science. I build Swift and TypeScript apps, from a meal planner to an iOS Braille learning app, and this past summer I interned on Apple's Vision Pro team, prototyping new experiences.",
+
+  /* ---------- NOW ----------
+     A little "what I'm up to" box in the sidebar. Edit the text
+     or add/remove lines. Use [] to hide the box.                  */
+  now: [
+    { label: "building",  text: "a PiPod" },
+    { label: "learning",  text: "React Native" },
+    { label: "listening", text: "Just Like Heaven by The Cure" },
+  ],
 
   /* ---------- CONTACT ---------- */
-  email: "anthonycardozo06@gmail.com",
-  resume: "resume.pdf",                 // upload your resume with this exact name, or "" to hide
+  email: "miay@cs.utexas.edu",
+  resume: "",                           // upload your resume as resume.pdf, then set this to "resume.pdf"
   links: [
-    { label: "LinkedIn", url: "https://linkedin.com/in/anthony-cardozo-4361b6310" },
-    { label: "GitHub",   url: "https://github.com/your-username" },
+    { label: "LinkedIn", url: "https://linkedin.com/in/miayonker" },
+    { label: "GitHub",   url: "https://github.com/pythonusermia" },
   ],
 
   /* ---------- EXPERIENCE ----------
@@ -40,36 +63,34 @@ window.PORTFOLIO = {
      business all count.                                           */
   experience: [
     {
-      role: "Software Engineering Intern",
-      org: "Amazon Web Services",
-      place: "Seattle, WA",
+      role: "SWE Intern",
+      org: "Apple – Vision Pro Group",
+      place: "",
       dates: "Summer 2026",
-      summary: "Built a weekly pipeline that grades an AI root-cause-analysis agent and found fixes that raised its average score 23%.",
-      tags: ["Lambda", "SQS", "Bedrock", "DynamoDB"],
+      summary: "Rapidly prototyped user-focused experiences exploring intelligence, augmented reality, and ambient computing, then presented demos to cross-functional partners and leadership.",
+      tags: ["Swift", "ARKit", "visionOS"],
+      /* Optional: add photos and the card gets a "flip for photos" button. */
+      photos: [
+        { src: "images/apple-interns.jpg", caption: "intern crew", alt: "Apple interns posing in front of a vintage van with Apple 26 signs" },
+        { src: "images/apple-lunch.jpg", caption: "team lunch", alt: "A team lunch around a long table at a restaurant" },
+        { src: "images/apple-rainbow.jpg", caption: "rainbow at the park", alt: "Interns lying on the grass in front of the big rainbow sculpture at Apple Park" },
+      ],
     },
     {
-      role: "Founding Engineer",
-      org: "One Dollar Computer",
+      role: "Secretary, Executive Board",
+      org: "UT SHPE",
       place: "Austin, TX",
-      dates: "2026 – now",
-      summary: "Built the cloud compiler that lets you write C or Rust in the browser and flash a RISC-V board in under 6 seconds.",
-      tags: ["C", "Rust", "GCP", "WebHID"],
+      dates: "Fall 2025 – now",
+      summary: "Use data-driven analysis to improve the member experience year-round, build internal tools for the leadership team, and work toward chapter recognition from SHPE National.",
+      tags: [],
     },
     {
-      role: "Website Lead",
-      org: "SHPE UT Austin",
+      role: "Engineering Division",
+      org: "Texas Blockchain",
       place: "Austin, TX",
-      dates: "2026 – now",
-      summary: "Lead the platform 400+ members use to earn points for convention and stipends. 1,000+ check-ins in the first 3 weeks.",
-      tags: ["React", "Supabase"],
-    },
-    {
-      role: "Founder",
-      org: "Cardozo Enchilados",
-      place: "Dallas, TX",
-      dates: "2023 – now",
-      summary: "Run a Mexican candy business with my family: 1,500+ units sold, plus a Stripe storefront that replaced taking orders over DMs.",
-      tags: ["React", "Express", "MongoDB", "Stripe"],
+      dates: "Fall 2025 – now",
+      summary: "Built a Python P2P Trading Optimizer that uses the Jupiter DeFi API to analyze token swap routes on Solana, with mock data pipelines for offline testing and ML route prediction.",
+      tags: ["Python", "Solana", "Machine Learning"],
     },
   ],
 
@@ -79,27 +100,27 @@ window.PORTFOLIO = {
      "url" can link to a demo, GitHub repo, or photos ("" for none). */
   projects: [
     {
-      name: "HONK",
-      when: "Hackathon · Apr 2026",
-      stack: ["Next.js", "Gemini", "Firebase"],
-      summary: "A focus app that checks your screen every minute. Drift off task and it honks at you and takes your bread.",
-      result: "Distracted time dropped from 33% to 8%",
+      name: "Fresh Plans",
+      when: "Fall 2025 – Spring 2026",
+      stack: ["Swift", "Xcode"],
+      summary: "A full-stack meal planning app that uses a custom algorithm to generate personalized meal plans and grocery lists.",
+      result: "Handles data parsing, saved preferences, and state management end to end",
       url: "",
     },
     {
-      name: "Landing Pad",
-      when: "Hackathon · Jul 2026",
-      stack: ["React", "TypeScript", "AWS CDK"],
-      summary: "A no-login city guide where outgoing interns pass down their favorite food, housing, and activity spots to the next class.",
-      result: "54 places on a color-coded map",
+      name: "ReRoom",
+      when: "Summer – Fall 2025",
+      stack: ["TypeScript", "Computer Vision"],
+      summary: "An AI-powered spatial organization app that analyzes room layouts with computer vision and recommends how to optimize them.",
+      result: "Combines image recognition APIs, 3D mapping, and automated recommendations",
       url: "",
     },
     {
-      name: "SHPE Chapter Platform",
-      when: "SHPE · 2026",
-      stack: ["React", "Supabase"],
-      summary: "Event check-ins, a points leaderboard, and an officer dashboard for our chapter.",
-      result: "1,000+ check-ins in 3 weeks",
+      name: "Radix",
+      when: "Winter 2024 – Fall 2025",
+      stack: ["Swift", "Core Haptics", "Xcode"],
+      summary: "An iOS Braille learning app that simulates tactile feedback for visually impaired users.",
+      result: "Uses Core Haptics to make Braille learnable by touch",
       url: "",
     },
   ],
@@ -107,11 +128,11 @@ window.PORTFOLIO = {
   /* ---------- SKILLS ----------
      Group them however makes sense for your major.               */
   skills: [
-    { group: "Languages",  items: ["Java", "C", "Python", "JavaScript", "TypeScript", "x86 Assembly"] },
-    { group: "Frameworks", items: ["React", "Next.js", "Node", "Express", "Supabase", "Firebase"] },
-    { group: "Cloud",      items: ["AWS Lambda", "S3", "SQS", "DynamoDB", "Bedrock", "CDK"] },
+    { group: "Languages",  items: ["Java", "Python", "R", "Swift", "TypeScript"] },
+    { group: "Tools",      items: ["Xcode", "Git", "GitHub", "Visual Studio Code", "PyCharm", "RStudio", "Eclipse", "n8n"] },
+    { group: "Platforms",  items: ["iOS", "macOS", "visionOS"] },
   ],
 
   /* ---------- AWARDS (optional, use [] for none) ---------- */
-  awards: ["Amazon Future Engineer Scholar", "Dijkstra Scholar", "HITEC Scholar", "HSF Scholar"],
+  awards: ["Hispanic Scholarship Fund Scholar (2025, 2026)", "Girls Who Code SSP"],
 };
