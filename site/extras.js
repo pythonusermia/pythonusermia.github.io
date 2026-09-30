@@ -112,13 +112,14 @@
     st.id = "px-style";
     st.textContent =
       /* typing intro */
-      ".shell aside>*:not(.prompt),.shell main{transition:opacity .7s ease}" +
-      ".shell.px-intro aside>*:not(.prompt):not(h1):not(.role),.shell.px-intro main{opacity:0}" +
-      "#px-spirals{position:fixed;top:50%;left:calc(50vw - 540px - var(--sp) * 44px - 8px);width:calc(var(--sp) * 44px);transform:translateY(-50%);image-rendering:pixelated;pointer-events:none;z-index:-1;display:none;animation:px-float 7s ease-in-out infinite}" +
+      ".shell aside>*:not(.prompt),.shell .stage,.shell .topnav{transition:opacity .7s ease}" +
+      ".shell.px-intro aside>*:not(.prompt):not(h1):not(.role),.shell.px-intro .stage,.shell.px-intro .topnav{opacity:0}" +
+      "body{position:relative}" +
+      "#px-spirals{position:absolute;top:0;bottom:0;left:max(4px,calc(50vw - 540px - var(--sp) * 44px - 36px));width:calc(var(--sp) * 44px);background:url(images/spirals.png) repeat-y 0 0 / 100% auto;image-rendering:pixelated;pointer-events:none;z-index:-1;display:none;animation:px-drift 60s linear infinite}" +
       "@media (min-width:1300px){#px-spirals{--sp:2;display:block}}" +
       "@media (min-width:1500px){#px-spirals{--sp:3}}" +
       "@media (min-width:1760px){#px-spirals{--sp:4}}" +
-      "@keyframes px-float{50%{transform:translateY(calc(-50% - 8px))}}" +
+      "@keyframes px-drift{to{background-position:0 calc(var(--sp) * -112px)}}" +
       "body>*:not(#px-boot){transition:opacity .6s ease}" +
       ".shell aside h1{transition:min-height .35s ease}" +
       ".shell.px-words aside h1{min-height:2.24em}" +
@@ -168,7 +169,7 @@
       ".px-ps1{color:var(--accent-2);white-space:nowrap}" +
       ".px-in input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;color:var(--bright);caret-color:var(--accent-3)}" +
       "@media (max-width:480px){#px-term-btn b{display:none}#px-term-btn{padding:11px 13px}.px-in input{font-size:16px}}" +
-      "@media (prefers-reduced-motion:reduce){.px-heart,.px-typing::after,#px-spirals,#px-cat .px-cat-btn.hop,#px-cat.sleeping .px-z{animation:none}.shell aside>*:not(.prompt),.shell main{transition:none}}";
+      "@media (prefers-reduced-motion:reduce){.px-heart,.px-typing::after,#px-spirals,#px-cat .px-cat-btn.hop,#px-cat.sleeping .px-z{animation:none}.shell aside>*:not(.prompt),.shell .stage,.shell .topnav{transition:none}}";
     document.head.appendChild(st);
   }
 
@@ -262,12 +263,11 @@
   /* ---------- spiral flourish ---------- */
   function spirals() {
     if (!on("spirals") || document.getElementById("px-spirals")) return;
-    var img = document.createElement("img");
-    img.id = "px-spirals";
-    img.src = "images/spirals.png";
-    img.alt = "";
-    img.setAttribute("aria-hidden", "true");
-    document.body.appendChild(img);
+    // a full-height strip down the left margin that tiles the flourish, so it runs the whole length of the page
+    var strip = document.createElement("div");
+    strip.id = "px-spirals";
+    strip.setAttribute("aria-hidden", "true");
+    document.body.appendChild(strip);
   }
 
   /* ---------- pixel details ---------- */
@@ -293,7 +293,7 @@
   // small logo before an experience entry's org name, matched by the first word of the org
   function logos() {
     if (!on("logos")) return;
-    document.querySelectorAll(".job h3 span").forEach(function (sp) {
+    document.querySelectorAll(".job h3 span, .edu-t").forEach(function (sp) {
       if (sp.querySelector(".px-logo")) return;
       var key = sp.textContent.replace(/^[\s\u00b7]+/, "").split(/[\s\u2013-]/)[0].toLowerCase();
       if (LOGOS[key] && sp.firstChild && sp.firstChild.nodeType === 3) {
@@ -303,7 +303,7 @@
         var tag = document.createElement("span");
         tag.className = "px-logo";
         tag.innerHTML = LOGOS[key];
-        sp.insertBefore(tag, sp.firstChild.nextSibling);
+        sp.insertBefore(tag, m ? sp.firstChild.nextSibling : sp.firstChild);   // after a "· " separator, or at the very start
       }
     });
   }
@@ -440,7 +440,12 @@
     return true;
   }
 
-  var COMMANDS = ["help", "whoami", "now", "ls", "cat", "open", "projects", "experience", "skills", "contact", "pet", "meow", "echo", "date", "pwd", "clear", "exit"];
+  var PAGES = ["home", "experience", "projects", "about"];
+  function hashPage() {
+    var m = String(location.hash || "").replace(/^#\/?/, "").split(/[/?]/)[0].toLowerCase();
+    return PAGES.indexOf(m) > -1 ? m : "home";
+  }
+  var COMMANDS = ["help", "whoami", "now", "cd", "ls", "cat", "open", "projects", "experience", "skills", "contact", "pet", "meow", "echo", "date", "pwd", "clear", "exit"];
 
   function mountTerm() {
     if (term) return;
@@ -503,7 +508,8 @@
     var HELP = "commands:\n" +
       "  whoami            who I am\n" +
       "  now               what I'm up to lately\n" +
-      "  ls [dir]          about, experience, projects, skills\n" +
+      "  cd <page>         go to home, experience, projects or about\n" +
+      "  ls [dir]          list pages, or what's inside one\n" +
       "  cat <file>        about.txt, contact.txt, or a project name\n" +
       "  open <name>       linkedin, github, email, resume or a project\n" +
       "  projects          what I've built\n" +
@@ -532,7 +538,7 @@
         case "whoami": print([d.name, d.headline, d.school, d.location].filter(Boolean).join("\n")); break;
         case "now": print(list(d.now).map(function (n) { return (n.label + ":          ").slice(0, 11) + n.text; }).join("\n") || "nothing yet"); break;
         case "ls":
-          if (!a0) print("about/  experience/  projects/  skills/  contact.txt" + (d.resume ? "  resume.pdf" : ""));
+          if (!a0) print("home/  experience/  projects/  about/  skills/  contact.txt" + (d.resume ? "  resume.pdf" : ""));
           else if (a0 === "about") print("about.txt");
           else if (a0 === "projects") print(list(d.projects).map(function (p) { return slug(p.name); }).join("  ") || "(empty)");
           else if (a0 === "experience") print(list(d.experience).map(function (j) { return slug(j.org); }).join("  ") || "(empty)");
@@ -573,7 +579,16 @@
         case "meow": print("meow."); if (cat) cat.say("meow!"); break;
         case "echo": print(args.join(" ")); break;
         case "date": print(new Date().toString()); break;
-        case "pwd": print("/home/" + first + "/portfolio"); break;
+        case "pwd": print("/home/" + first + "/portfolio/" + hashPage()); break;
+        case "cd": {
+          var dest = a0 || "home";
+          if (dest === "~" || dest === "." || dest === ".." || dest === "/") dest = "home";
+          if (PAGES.indexOf(dest) === -1) { print("cd: no such page: " + (args[0] || "") + ". try: " + PAGES.join(", "), "err"); break; }
+          if (dest === hashPage()) { print("already in " + dest, "dim"); break; }
+          location.hash = "#/" + (dest === "home" ? "" : dest);
+          print("-> " + dest, "dim");
+          break;
+        }
         case "clear": out.textContent = ""; break;
         case "exit": case "quit": case "close": close(); break;
         case "sudo":
@@ -597,6 +612,7 @@
         var c = m[1].toLowerCase();
         if (c === "cat") pool = ["about.txt", "contact.txt"].concat(list(d.projects).map(function (p) { return slug(p.name); }));
         else if (c === "ls") pool = ["about", "experience", "projects", "skills"];
+        else if (c === "cd") pool = PAGES;
         else if (c === "open") pool = list(d.links).map(function (l) { return l.label.toLowerCase(); }).concat(["email", "resume"], list(d.projects).map(function (p) { return slug(p.name); }));
         else return;
       } else if (/^\S*$/.test(v)) { prefix = v.toLowerCase(); pool = COMMANDS; }
@@ -705,7 +721,7 @@
       var dot = P * (W < 600 ? 1 : 2), word = "hello", adv = 6 * dot;
       var x0 = cx - (word.length * adv - dot) / 2, y0 = cy - 3.5 * dot;
       ctx.globalAlpha = alpha;
-      [[dot / 2, dot / 2, "#8E2F5C"], [0, 0, "#FFF3F8"]].forEach(function (pass) {
+      [[dot / 2, dot / 2, "#F6B9D1"], [0, 0, "#C2467F"]].forEach(function (pass) {
         ctx.fillStyle = pass[2];
         word.split("").forEach(function (ch, i) {
           GLYPH[ch].forEach(function (row, ry) {
@@ -777,6 +793,16 @@
   }
 
   /* ---------- wire up ---------- */
+  // pages swap without a reload: re-decorate the new content, and let the cat react
+  var CAT_ROUTE = { home: "welcome back", experience: "apple intern!", projects: "fresh plans!", about: "that's mia", notfound: "where'd it go?" };
+  window.addEventListener("pf:route", function (e) {
+    if (document.documentElement.getAttribute("data-style") !== "terminal") return;
+    logos();
+    var line = CAT_ROUTE[e.detail && e.detail.route];
+    if (cat && line) setTimeout(function () { if (cat) cat.say(line); }, 350);
+  });
+  window.addEventListener("pf:say", function (e) { if (cat) cat.say(String(e.detail)); });
+
   var firstRun = true;
   function apply() {
     var style = document.documentElement.getAttribute("data-style");

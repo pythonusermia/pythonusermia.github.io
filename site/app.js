@@ -48,6 +48,7 @@
     document.documentElement.setAttribute("data-style", name);
     document.getElementById("app").innerHTML = theme.render(d, h);
     document.title = d.name ? d.name + " · Portfolio" : "Portfolio";
+    if (theme.after) theme.after(d, h);   // themes with pages can refine the title
     if (d.showThemePicker !== false) picker(name);
   }
 
@@ -76,7 +77,7 @@
       var b = e.target.closest("button");
       if (!b) return;
       var n = b.getAttribute("data-t");
-      try { history.replaceState(null, "", "?theme=" + n); } catch (err) {}
+      try { history.replaceState(null, "", "?theme=" + n + location.hash); } catch (err) {}
       draw(n);
     };
   }

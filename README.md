@@ -41,9 +41,18 @@ Page not loading? Check that your repo name exactly matches your username and th
 ## What's in here
 ```
 content.js          ← your info (the only file you need to edit)
+site/extras.js      ← pixel cat, mini terminal, boot animation, spirals
 index.html          ← the page shell
 site/app.js         ← puts your content into the chosen style
 site/themes/        ← terminal, clean, and story styles
 images/             ← your photos
 .devcontainer/      ← sets up Codespaces and the live preview
 ```
+
+## Pages
+The Terminal style is a one-shell site with four pages: `#/home`, `#/experience`, `#/projects` and `#/about`. They all read from `content.js`.
+- The project with `featured: true` becomes the big card on **Projects** (with its `screens` as a scrolling phone gallery) and a tile on **Home**.
+- An experience entry with `photos` gets a "flip for photos" card.
+- **Experience** shows your jobs, plus a full section for each organization in `involvement` (SHPE, Texas Blockchain), which replaces that org's plain entry.
+- **About** shows `about`, `education`, `skills`, `awards` and your links.
+- The single-page version of the site is saved in git under the tag `single-page` (`git checkout single-page` to look at it).
